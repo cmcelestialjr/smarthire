@@ -5,5 +5,7 @@
 </script>
  
 <template>
-    <h4>Hello World!</h4>
+    <h1 class="text-3xl font-bold underline">
+        Hello world!
+      </h1>
 </template>

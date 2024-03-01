@@ -13,6 +13,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('app');
-});
+//Route::middleware(['addCSPHeader'])->group(function () {
+    Route::get('/', function () {
+        return view('app');
+    });
+//});
+
