@@ -6,6 +6,8 @@
 function openModalEvalForm(intern) {
  document.getElementById("myModalEvalForm").showModal();
 }
+
+
 </script>
  
  onMounted(() => {
@@ -13,6 +15,7 @@ function openModalEvalForm(intern) {
 });
 
 <template>
+
 
 <nav class=" bg-white border-gray-200 dark:bg-gray-900 h-24">
   <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto ">
