@@ -133,7 +133,7 @@
 
       <div class="col-span-2">
         <h2 class="text-lg font-bold mx-14">Item Details</h2>
-        <div class="flex justify-center items-center">
+        <div class="flex justify-center items-center sticky top-0">
           <div
             class="w-10/12 mt-10 overflow-y-auto p-6 h-screen border rounded-xl"
             :class="{ 'bg-gray-200': !selectedItem }"
