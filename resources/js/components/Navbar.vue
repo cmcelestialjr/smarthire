@@ -1,10 +1,54 @@
 <script setup>
     import { ref } from 'vue'
+    import { useRouter } from 'vue-router'
     import { initFlowbite } from "flowbite";
+    import axios from 'axios';
+
+const router = useRouter();
+
+const name = ref('');
+const email = ref('');
+const password = ref('');
+
+const register = async () => {
+    try {
+      const response = await axios.post('/api/register', {
+        name: name.value,
+        email: email.value,
+        password: password.value
+      });
+      console.log(response.data);
+      // Redirect to verification page after successful registration
+      router.push({ name: 'verify-email' });
+    } catch (error) {
+      console.error(error.response.data);
+      // Handle registration errors
+    }
+  };
+
+  const login = async () => {
+  try {
+    const response = await axios.post('/api/login', {
+      email: email.value,
+      password: password.value
+    });
+    console.log(response.data);
+    // Handle successful login, e.g., redirect to dashboard
+    // Redirect to verification page after successful registration
+      router.push({ name: 'user' });
+  } catch (error) {
+    console.error(error.response.data);
+    // Handle login errors
+  }
+};
 
 
 function openModalEvalForm(intern) {
  document.getElementById("myModalEvalForm").showModal();
+}
+
+function openModalRegister(intern) {
+ document.getElementById("myModalRegister").showModal();
 }
 
 
@@ -20,11 +64,12 @@ function openModalEvalForm(intern) {
 <nav class=" bg-white border-gray-200 dark:bg-gray-900 h-24">
   <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto ">
   <a href="https://flowbite.com/" class="flex items-center space-x-3 rtl:space-x-reverse">
-       <img src="../assets/smarthirelogo.png" class="w-30 h-24"/>
+       <img src="../Assets/smarthirelogo.png" class="w-30 h-24"/>
       <!-- <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">SmartHire</span> -->
   </a>
   <div class="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
-      <button @click="openModalEvalForm(form)" type="button" class=" border-2 border-gold hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Login</button>
+      <button @click="openModalEvalForm(form)" type="button" class="mr-2 border-2 border-gold hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Login</button>
+      <button @click="openModalRegister(form)" type="button" class=" border-2 text-white bg-gold focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Register</button>
       <!-- <button data-modal-target="authentication-modal" data-modal-toggle="authentication-modal" class="block text-white bg-gold hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
   Login
 </button> -->
@@ -72,7 +117,7 @@ function openModalEvalForm(intern) {
           Hello,Again!
         </h1>
 
-        <h1 class="text-xl md:text-1xl font-bold leading-tight mt-10">
+        <h1 class="text-xl md:text-1xl font-bold leading-tight mt-10 mb-10">
           Log in to your account
         </h1>
 
@@ -80,56 +125,63 @@ function openModalEvalForm(intern) {
           {{ status }}
         </div>
 
-        <form @submit.prevent="submit" class="mt-6" action="#" method="POST">
-          <div class="relative">
+        
+
+        <form @submit.prevent="login">
+      <!-- <div>
+        <label>Email:</label>
+        <input type="email" 
+        v-model="email" required>
+      </div>
+      <div>
+        <label>Password:</label>
+        <input 
+        type="password" 
+        v-model="password" required>
+      </div> -->
+
+      <div class="relative z-0 w-full mb-6 group">
             <input
-              type="email"
-              id="email"
-              class="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-500 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+              type="email" 
+              v-model="email"
+              class="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:border-blue peer"
               placeholder=" "
+             
               required
-              autocomplete="username"
+              autocomplete="password_confirmation"
             />
-            <InputError class="mt-2" />
             <label
-              for="email"
+              for="password_confirmation"
               class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1"
-              >Email address</label
+              >Email</label
             >
+            <InputError class="mt-2"/>
           </div>
 
-          <div class="relative mt-4">
+      <div class="relative z-0 w-full mb-6 group">
             <input
-              type="password"
-              name=""
-              id="password"
-              class="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-500 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+              type="password" 
+              v-model="password"
+              class="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:border-blue peer"
               placeholder=" "
+             
               required
-              autocomplete="current-password"
+              autocomplete="password_confirmation"
             />
-            <InputError class="mt-2" />
             <label
-              for="password"
+              for="password_confirmation"
               class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1"
               >Password</label
             >
+            <InputError class="mt-2"/>
           </div>
-
-          <div class="block mt-4 flex flex-wrap justify-between">
-          </div>
-
-          <button
-            type="submit"
-            class="w-80 py-2.5 block bg-gold hover:bg-indigo-400 focus:bg-indigo-400 text-white font-semibold rounded-lg px-4 py-3 mt-6"
-            
-          >
-            Log In
-          </button>
-        </form>
+      <button type="submit"
+      class="w-80 py-2.5 block bg-gold hover:bg-gold/80 focus:bg-gold/90 text-white font-semibold rounded-lg px-4 mt-3"
+      >Login</button>
+    </form>
 
         <p class="mt-8 flex justify-center text-gray-700">
-          Need an account?&nbsp;<a
+          Need an account?&nbsp;<a onclick="document.getElementById('myModalEvalForm').close();" @click="openModalRegister(form)" type="button"
             
             class="text-blue-500 hover:text-blue-700 font-semibold"
             >Create an account</a
@@ -138,55 +190,123 @@ function openModalEvalForm(intern) {
       </div>
     </dialog>
 
-<!-- Main modal -->
-<div id="authentication-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
-    <div class="relative p-4 w-full max-w-md max-h-full">
-        <!-- Modal content -->
-        <div class="relative bg-white rounded-lg shadow dark:bg-gray-900">
-            <!-- Modal header -->
-            <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
-                <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
-                    Sign in to our platform
-                </h3>
-                <button type="button" class="end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="authentication-modal">
+    <dialog id="myModalRegister" class="bg-white rounded-lg shadow dark:bg-gray-900">
+     
+            
+      <div class="flex items-center flex-col p-10">
+         <button type="button" class="end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" onclick="document.getElementById('myModalRegister').close();">
                     <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
                     </svg>
                     <span class="sr-only">Close modal</span>
                 </button>
-            </div>
-            <!-- Modal body -->
-            <div class="p-4 md:p-5">
-                <form class="space-y-6 px-6 lg:px-8 pb-4 sm:pb-6 xl:pb-8" action="#">
-                    
-                    <div>
-                        <label for="email" class="text-sm font-medium text-gray-900 block mb-2 dark:text-gray-300">Your email</label>
-                        <input type="email" name="email" id="email" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" placeholder="name@company.com" required="">
-                    </div>
-                    <div>
-                        <label for="password" class="text-sm font-medium text-gray-900 block mb-2 dark:text-gray-300">Your password</label>
-                        <input type="password" name="password" id="password" placeholder="••••••••" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" required="">
-                    </div>
-                    <div class="flex justify-between">
-                        <div class="flex items-start">
-                            <div class="flex items-center h-5">
-                                <input id="remember" aria-describedby="remember" type="checkbox" class="bg-gray-50 border border-gray-300 focus:ring-3 focus:ring-blue-300 h-4 w-4 rounded dark:bg-gray-600 dark:border-gray-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800" required="">
-                            </div>
-                            <div class="text-sm ml-3">
-                            <label for="remember" class="font-medium text-gray-900 dark:text-gray-300">Remember me</label>
-                            </div>
-                        </div>
-                        <a href="#" class="text-sm text-blue-700 hover:underline dark:text-blue-500">Lost Password?</a>
-                    </div>
-                    <button type="submit" class="w-full text-white bg-gold hover:bg-blue focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Login to your account</button>
-                    <div class="text-sm font-medium text-gray-500 dark:text-gray-300">
-                        Not registered? <a href="#" class="text-blue hover:underline dark:text-blue-500">Create account</a>
-                    </div>
-                </form>
-            </div>
+      <div class="">
+         <h1
+          class="text-4xl md:text-4xl font-bold leading-tight flex justify-center mb-10"
+        >
+          Sign Up
+        </h1>
+
+
+           <form @submit.prevent="register">
+        <!-- <div class="mb-4">
+          <label for="name" class="block mb-1">Name:</label>
+          <input 
+          type="text" 
+          id="name" 
+          v-model="name" class="w-full px-3 py-2 border rounded-md">
         </div>
-    </div>
-</div> 
+        <div class="mb-4">
+          <label for="email" class="block mb-1">Email:</label>
+          <input 
+          type="email" 
+          id="email" 
+          v-model="email" class="w-full px-3 py-2 border rounded-md">
+        </div> -->
+        <!-- <div class="mb-4">
+          <label for="password" class="block mb-1">Password:</label>
+          <input type="password" 
+          id="password" 
+          v-model="password" 
+          class="w-full px-3 py-2 border rounded-md">
+        </div> -->
+
+        
+        <div class="relative z-0 w-full mb-6 group">
+            <input
+              type="text" 
+              id="name" 
+              v-model="name"
+              class="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:border-blue peer"
+              placeholder=" "
+             
+              required
+              autocomplete="password_confirmation"
+            />
+            <label
+              for="password_confirmation"
+              class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1"
+              >Name</label
+            >
+            <InputError class="mt-2"/>
+          </div>
+
+        <div class="relative z-0 w-full mb-6 group">
+            <input
+              type="email" 
+              id="email" 
+              v-model="email" 
+              class="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:border-blue peer"
+              placeholder=" "
+             
+              required
+              autocomplete="password_confirmation"
+            />
+            <label
+              for="password_confirmation"
+              class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1"
+              >Email</label
+            >
+            <InputError class="mt-2"/>
+          </div>
+
+         <div class="relative z-0 w-full mb-6 group">
+            <input
+              type="password"
+              id="password"
+              v-model="password"
+              class="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:border-blue peer"
+              placeholder=" "
+             
+              required
+              autocomplete="password_confirmation"
+            />
+            <label
+              for="password_confirmation"
+              class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1"
+              >Password</label
+            >
+            <InputError class="mt-2"/>
+          </div>
+        <button type="submit" class="w-80 py-2.5 block bg-gold hover:bg-gold/80 focus:bg-gold/90 text-white font-semibold rounded-lg px-4 mt-3">Register</button>
+      </form>
+          <p
+            class="inline-block align-bottom mt-8 flex justify-center text-gray-700"
+          >
+            Already registered?&nbsp;<a onclick="document.getElementById('myModalRegister').close();" @click="openModalEvalForm(form)" type="button"
+              class="text-blue-500 hover:text-blue-700 font-semibold"
+              >Login</a
+            >
+          </p>
+
+      </div>
+
+        
+      </div>
+    </dialog>
+
+<!-- Main modal -->
+
 
 
 </template>

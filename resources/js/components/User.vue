@@ -1,5 +1,5 @@
 <template>
-  <Navbar />
+  <UserNav />
 
   <div class="flex justify-center items-center bg-blue h-52">
     <form class="w-9/12">
@@ -175,7 +175,7 @@
 </template>
 
 <script setup>
-import Navbar from "../components/Navbar.vue";
+import UserNav from "../components/UserNav.vue";
 import { ref } from "vue";
 
 const jobs = ref([
