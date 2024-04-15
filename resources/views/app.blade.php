@@ -7,7 +7,8 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <title>SMART HIRE</title>
          <!-- Favicons -->
-        <link rel="icon" href="{{ asset('storage/images/logo/lnu_logo.png') }}" type="image/gif" alt="LNU Logo" nonce="{{ csp_nonce() }}">
+        {{-- <link rel="icon" href="{{ asset('smarthirelogo.png') }}" alt="LNU Logo" > --}}
+         <link rel="icon" href="{{ asset('storage/images/logo/smarthirelogo.png') }}" type="image/png" nonce="{{ csp_nonce() }}"/>
         @vite(['resources/css/app.css'])
         @vite(['resources/js/app.js'])
     </head>
