@@ -17,5 +17,21 @@ use Illuminate\Support\Facades\Route;
     Route::get('/', function () {
         return view('app');
     });
+
+    Route::get('/verify-email', function () {
+        return view('app');
+    })->name('verify-email');
+
+    Route::get('/smarthire/user', function () {
+        return view('app');
+    })->name('user');
+
+    Auth::routes([
+        'verify'=> true
+    ]);
 //});
 
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
